@@ -1,9 +1,0 @@
-### Create Student
-POST localhost:7075/student
-Content-Type: application/json
-
-### Get By Surname
-GET localhost:7075/student/by-surname/Eshmatov
-
-### Get All
-GET localhost:7075/student

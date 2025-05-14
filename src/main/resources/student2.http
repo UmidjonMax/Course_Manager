@@ -1,0 +1,15 @@
+### Create Student
+POST localhost:7075/student
+Content-Type: application/json
+
+### Get By Name
+GET localhost:7075/student/by-name/
+
+### Get All
+GET localhost:7075/student
+
+### Pagination by level
+GET localhost:7075/student/paginationLevel?page=1&size=6&level=2
+
+### Student pagination
+GET localhost:7075/student/pagination?page=1&size=2

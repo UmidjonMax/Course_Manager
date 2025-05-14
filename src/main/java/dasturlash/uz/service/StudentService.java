@@ -29,7 +29,7 @@ public class StudentService {
         studentEntity.setLevel(studentDTO.getLevel());
         studentEntity.setAge(studentDTO.getAge());
         studentEntity.setGender(studentDTO.getGender());
-        studentEntity.setCreatedDate(LocalDate.now());
+        studentEntity.setCreatedDate(LocalDateTime.now());
         studentRepository.save(studentEntity);
         studentDTO.setId(studentEntity.getId());
         return studentDTO;
@@ -124,6 +124,7 @@ public class StudentService {
         dto.setLevel(entity.getLevel());
         dto.setAge(entity.getAge());
         dto.setGender(entity.getGender());
+        dto.setCreatedDate(entity.getCreatedDate());
         return dto;
     }
 

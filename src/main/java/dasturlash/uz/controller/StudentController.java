@@ -55,38 +55,38 @@ public class StudentController {
 
     // Get by Name
     @GetMapping("/by-name/{name}")
-    public ResponseEntity<List<StudentDTO>> getByName(@RequestParam String name) {
+    public ResponseEntity<List<StudentDTO>> getByName(@PathVariable String name) {
         return ResponseEntity.ok(studentService.findByName(name));
     }
 
     // Get by Surname
     @GetMapping("/by-surname/{surname}")
-    public ResponseEntity<List<StudentDTO>> getBySurname(@RequestParam String surname) {
+    public ResponseEntity<List<StudentDTO>> getBySurname(@PathVariable String surname) {
         return ResponseEntity.ok(studentService.findBySurname(surname));
     }
 
     // Get by Level
-    @GetMapping("/by-level")
-    public ResponseEntity<List<StudentDTO>> getByLevel(@RequestParam Integer level) {
+    @GetMapping("/by-level/{level}")
+    public ResponseEntity<List<StudentDTO>> getByLevel(@PathVariable Integer level) {
         return ResponseEntity.ok(studentService.findByLevel(level));
     }
 
     // Get by Age
-    @GetMapping("/by-age")
-    public ResponseEntity<List<StudentDTO>> getByAge(@RequestParam Integer age) {
+    @GetMapping("/by-age/{age}")
+    public ResponseEntity<List<StudentDTO>> getByAge(@PathVariable Integer age) {
         return ResponseEntity.ok(studentService.findByAge(age));
     }
 
     // Get by Gender
-    @GetMapping("/by-gender")
-    public ResponseEntity<List<StudentDTO>> getByGender(@RequestParam String gender) {
+    @GetMapping("/by-gender/{gender}")
+    public ResponseEntity<List<StudentDTO>> getByGender(@PathVariable String gender) {
         return ResponseEntity.ok(studentService.findByGender(gender));
     }
 
     // Get by Created Date
-    @GetMapping("/by-date")
+    @GetMapping("/by-date/{date}")
     public ResponseEntity<List<StudentDTO>> getByDate(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return ResponseEntity.ok(studentService.findByDate(date));
     }
 
