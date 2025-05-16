@@ -13,3 +13,26 @@ GET localhost:7075/student/paginationLevel?page=1&size=6&level=2
 
 ### Student pagination
 GET localhost:7075/student/pagination?page=1&size=2
+
+### filter Student
+POST localhost:7075/student/filter
+Content-Type: application/json
+
+{
+  "id": 9
+}
+
+### Create Course
+POST localhost:7075/course
+Content-Type: application/json
+
+{"name": "Android Kotlin", "price": 1600000, "duration": 6}
+
+### All Courses
+GET localhost:7075/course
+
+### Course Pagination
+GET localhost:7075/course/pagination?page=1&size=3
+
+### Course Pagination
+GET localhost:7075/course/pagination/priceBetween?page=1&size=3&from=1400000&to=1500000

@@ -1,8 +1,10 @@
 package dasturlash.uz.controller;
 
 import dasturlash.uz.dto.CourseDTO;
+import dasturlash.uz.dto.StudentDTO;
 import dasturlash.uz.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -80,6 +82,33 @@ public class CourseController {
     @GetMapping("/by-date-range")
     public ResponseEntity<List<CourseDTO>> getByDateRange(@RequestParam String from, @RequestParam String to) {
         return ResponseEntity.ok(courseService.getByCreatedDateBetween(LocalDate.parse(from), LocalDate.parse(to)));
+    }
+
+    @GetMapping("/pagination")
+    public ResponseEntity<Page<CourseDTO>> pagination(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        return ResponseEntity.ok(courseService.pagination(page-1, size));
+    }
+
+    @GetMapping("/paginationSorted")
+    public ResponseEntity<Page<CourseDTO>> paginationSorted(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        return ResponseEntity.ok(courseService.pagination(page-1, size));
+    }
+
+    @GetMapping("/pagination/price")
+    public ResponseEntity<Page<CourseDTO>> paginationByPrice(@RequestParam(value = "price") Integer price,
+                                                        @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        return ResponseEntity.ok(courseService.paginationByPrice(page-1, size, price));
+    }
+
+    @GetMapping("/pagination/priceBetween")
+    public ResponseEntity<Page<CourseDTO>> paginationByPriceBetween(@RequestParam(value = "from") Integer from,
+                                                                    @RequestParam(value = "to") Integer to,
+                                                        @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                       @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        return ResponseEntity.ok(courseService.paginationByPriceBetween(page-1, size, from, to));
     }
 }
 

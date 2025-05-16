@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class CourseService {
         courseEntity.setName(courseDTO.getName());
         courseEntity.setPrice(courseDTO.getPrice());
         courseEntity.setDuration(courseDTO.getDuration());
+        courseEntity.setCreatedDate(LocalDateTime.now());
         courseRepository.save(courseEntity);
         courseDTO.setId(courseEntity.getId());
         return courseDTO;
@@ -130,7 +132,7 @@ public class CourseService {
         return new PageImpl<CourseDTO>(dtoList, pageRequest, totalElement);
     }
 
-    public PageImpl<CourseDTO> paginationByPrice(int size, int page, Integer priceFrom, Integer priceTo) {
+    public PageImpl<CourseDTO> paginationByPriceBetween(int size, int page, Integer priceFrom, Integer priceTo) {
         Sort sort = Sort.by("createdDate").descending(); // order by createDate desc
         PageRequest pageRequest = PageRequest.of(size, page, sort); // order by createDate desc limit ? offset ?
         Page<CourseEntity> pageObj = courseRepository.findByPriceBetween(priceFrom, priceTo, pageRequest);// select * from ...
@@ -152,6 +154,7 @@ public class CourseService {
         dto.setName(courseEntity.getName());
         dto.setPrice(courseEntity.getPrice());
         dto.setDuration(courseEntity.getDuration());
+        dto.setCreatedDate(courseEntity.getCreatedDate());
         return dto;
     }
 }

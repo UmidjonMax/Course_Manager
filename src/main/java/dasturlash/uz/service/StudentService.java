@@ -1,7 +1,9 @@
 package dasturlash.uz.service;
 
 import dasturlash.uz.dto.StudentDTO;
+import dasturlash.uz.dto.StudentFilterDTO;
 import dasturlash.uz.entity.StudentEntity;
+import dasturlash.uz.repository.StudentCustomRepository;
 import dasturlash.uz.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,8 @@ import java.util.Optional;
 public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private StudentCustomRepository studentCustomRepository;
 
     public StudentDTO create(StudentDTO studentDTO) {
         StudentEntity studentEntity = new StudentEntity();
@@ -168,6 +172,18 @@ public class StudentService {
         entityList.forEach(entity -> dtoList.add(toDTO(entity)));
 
         return new PageImpl<StudentDTO>(dtoList, pageRequest, totalElement);
+    }
+
+    public Page<StudentDTO> filter(StudentFilterDTO filterDTO, int page, int size) {
+        Page<StudentEntity> pageObj = studentCustomRepository.filter(filterDTO, page, size);
+
+        List<StudentEntity> entityList = pageObj.getContent();
+        Long totalElement = pageObj.getTotalElements();
+
+        List<StudentDTO> dtoList = new LinkedList<>();
+        entityList.forEach(entity -> dtoList.add(toDTO(entity)));
+
+        return new PageImpl<StudentDTO>(dtoList, PageRequest.of(page, size), totalElement);
     }
 
 

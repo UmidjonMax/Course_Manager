@@ -1,6 +1,7 @@
 package dasturlash.uz.controller;
 
 import dasturlash.uz.dto.StudentDTO;
+import dasturlash.uz.dto.StudentFilterDTO;
 import dasturlash.uz.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -102,5 +103,14 @@ public class StudentController {
                                                             @RequestParam(value = "level", defaultValue = "1") Integer level) {
         return ResponseEntity.ok(studentService.paginationByLevel(page-1, size, level));
     }
+
+    @PostMapping("/filter")
+    public ResponseEntity<Page<StudentDTO>> filter(
+            @RequestBody StudentFilterDTO filterDTO,
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "3") Integer size) {
+        return ResponseEntity.ok(studentService.filter(filterDTO, page - 1, size));
+    }
+
 
 }

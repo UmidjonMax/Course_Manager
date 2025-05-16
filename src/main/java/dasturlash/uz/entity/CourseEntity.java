@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,5 +17,6 @@ public class CourseEntity {
     private String name;
     private Integer price;
     private Integer duration;
-    private LocalDate createdDate;
+    @Column
+    private LocalDateTime createdDate;
 }
