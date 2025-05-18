@@ -8,12 +8,10 @@ import lombok.Setter;
 import java.time.LocalDate;
 @Getter
 @Setter
-public class StudentCourseMarkDTO {
+public class SCMFilterDTO {
     private Integer id;
-    private Integer studentId;
-    private Integer courseId;
+    private StudentEntity studentId;
+    private CourseEntity courseId;
     private Integer mark;
     private LocalDate createdDate;
-    private CourseDTO course;
-    private StudentDTO student;
 }

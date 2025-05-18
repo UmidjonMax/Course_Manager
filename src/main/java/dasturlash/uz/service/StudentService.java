@@ -3,6 +3,7 @@ package dasturlash.uz.service;
 import dasturlash.uz.dto.StudentDTO;
 import dasturlash.uz.dto.StudentFilterDTO;
 import dasturlash.uz.entity.StudentEntity;
+import dasturlash.uz.mapper.StudentMapper;
 import dasturlash.uz.repository.StudentCustomRepository;
 import dasturlash.uz.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,6 +120,28 @@ public class StudentService {
         list.forEach(studentEntity -> studentDTOList.add(toDTO(studentEntity)));
         return studentDTOList;
     }
+
+    public StudentDTO byId(Integer sId) {
+        List<Object[]> objList = studentRepository.byId(sId);
+        for (Object[] obj : objList) {
+            StudentDTO student = new StudentDTO();
+            student.setId((Integer) obj[0]);
+            student.setName((String) obj[1]);
+            return student;
+        }
+        return null;
+    }
+    public StudentDTO byIdMapper(Integer sId) {
+        List<StudentMapper> objList = studentRepository.byIdMapper(sId);
+        for (StudentMapper mapper : objList) {
+            StudentDTO student = new StudentDTO();
+            student.setId(mapper.getId());
+            student.setName(mapper.getName());
+            return student;
+        }
+        return null;
+    }
+
 
     public StudentDTO toDTO(StudentEntity entity) {
         StudentDTO dto = new StudentDTO();

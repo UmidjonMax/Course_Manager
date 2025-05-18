@@ -2,6 +2,7 @@ package dasturlash.uz.controller;
 
 import dasturlash.uz.dto.StudentDTO;
 import dasturlash.uz.dto.StudentFilterDTO;
+import dasturlash.uz.repository.StudentRepository;
 import dasturlash.uz.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,8 @@ import java.util.List;
 public class StudentController {
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private StudentRepository studentRepository;
 
     // Get All Students
     @GetMapping("")
@@ -27,11 +30,11 @@ public class StudentController {
     }
 
     // Get by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<StudentDTO> getById(@PathVariable("id") Integer id) {
-        StudentDTO dto = studentService.findById(id);
-        return ResponseEntity.ok(dto);
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<StudentDTO> getById(@PathVariable("id") Integer id) {
+//        StudentDTO dto = studentService.findById(id);
+//        return ResponseEntity.ok(dto);
+//    }
 
     // Create
     @PostMapping("")
@@ -103,6 +106,25 @@ public class StudentController {
                                                             @RequestParam(value = "level", defaultValue = "1") Integer level) {
         return ResponseEntity.ok(studentService.paginationByLevel(page-1, size, level));
     }
+
+    public StudentDTO byId(Integer sId) {
+        List<Object[]> objList = studentRepository.byId(sId);
+        for (Object[] obj : objList) {
+            StudentDTO student = new StudentDTO();
+            student.setId((Integer) obj[0]);
+            student.setName((String) obj[1]);
+            return student;
+        }
+        return null;
+    }
+
+    @GetMapping("/short/{id}")
+    public ResponseEntity<StudentDTO> getById(@PathVariable("id") Integer sId) {
+//        return ResponseEntity.ok(studentService.getById(sId));
+        return ResponseEntity.ok(studentService.byId(sId));
+    }
+
+
 
     @PostMapping("/filter")
     public ResponseEntity<Page<StudentDTO>> filter(

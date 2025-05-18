@@ -1,6 +1,7 @@
 package dasturlash.uz.repository;
 
 import dasturlash.uz.entity.StudentEntity;
+import dasturlash.uz.mapper.StudentMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,5 +41,11 @@ public interface StudentRepository extends CrudRepository<StudentEntity, Integer
     public Page<StudentEntity> findByLevel(Integer level, Pageable pageable);
 
     public Page<StudentEntity> findByGender(String gender, Pageable pageable);
+
+    @Query("select  id, name From StudentEntity  where id =?1")
+    List<Object[]> byId(Integer id);
+    // Object[] -> [id,name]
+    @Query("select  id as id, name as name From StudentEntity  where id =?1")
+    List<StudentMapper> byIdMapper(Integer id);
 
 }

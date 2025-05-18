@@ -1,10 +1,19 @@
 package dasturlash.uz.service;
 
 import dasturlash.uz.dto.CourseDTO;
+import dasturlash.uz.dto.CourseFilterDTO;
+import dasturlash.uz.dto.SCMFilterDTO;
 import dasturlash.uz.dto.StudentCourseMarkDTO;
 import dasturlash.uz.entity.CourseEntity;
 import dasturlash.uz.entity.StudentCourseMarkEntity;
+import dasturlash.uz.entity.StudentEntity;
+import dasturlash.uz.mapper.StudentCourseMarkMapper;
+import dasturlash.uz.repository.CourseRepository;
+import dasturlash.uz.repository.SCMCustomRepository;
 import dasturlash.uz.repository.StudentCourseMarkRepository;
+import dasturlash.uz.repository.StudentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -21,35 +30,50 @@ import java.util.Optional;
 
 @Service
 public class StudentCourseMarkService {
+    @Autowired
     private StudentCourseMarkRepository studentCourseMarkRepository;
+    @Autowired
+    private SCMCustomRepository scmRepository;
+    @Autowired
+    private StudentRepository studentRepository;
+    @Autowired
+    private CourseRepository courseRepository;
 
     public StudentCourseMarkDTO create(StudentCourseMarkDTO dto) {
+        StudentEntity student = studentRepository.findById(dto.getStudentId())
+                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
+        CourseEntity   course  = courseRepository.findById(dto.getCourseId())
+                .orElseThrow(() -> new IllegalArgumentException("Course not found"));
+
         StudentCourseMarkEntity entity = new StudentCourseMarkEntity();
-        entity.setStudentId(dto.getStudentId().getId());
-        entity.setCourseId(dto.getCourseId().getId());
+        entity.setStudentId(student.getId());
+        entity.setCourseId(course.getId());
         entity.setMark(dto.getMark());
+        entity.setCreatedDate(LocalDate.now());
+
         studentCourseMarkRepository.save(entity);
-        entity.setId(dto.getId());
+
+        dto.setId(entity.getId());
+        dto.setCreatedDate(LocalDate.now());
         return dto;
     }
 
     public StudentCourseMarkDTO findById(Integer id) {
-        List<StudentCourseMarkDTO> dtoList = new LinkedList<>();
-        StudentCourseMarkEntity optional = studentCourseMarkRepository.getById(id);
-        if (optional != null) {
-            dtoList.add(toDTO(optional));
-            return dtoList.getFirst();
+        List<StudentCourseMarkMapper> objList = studentCourseMarkRepository.getById(id);
+        for (StudentCourseMarkMapper studentCourseMarkMapper : objList) {
+            StudentCourseMarkDTO studentCourseMarkDTO = new StudentCourseMarkDTO();
+            studentCourseMarkDTO.setId(studentCourseMarkMapper.getId());
+            studentCourseMarkDTO.setStudentId(studentCourseMarkMapper.getStudentId());
+            studentCourseMarkDTO.setCourseId(studentCourseMarkMapper.getCourseId());
+            studentCourseMarkDTO.setMark(studentCourseMarkMapper.getMark());
+            studentCourseMarkDTO.setCreatedDate(studentCourseMarkMapper.getCreatedDate());
+            return studentCourseMarkDTO;
         }
         return null;
     }
-    public StudentCourseMarkDTO findByIdLong(Integer id) {
-        List<StudentCourseMarkDTO> dtoList = new LinkedList<>();
-        StudentCourseMarkEntity optional = studentCourseMarkRepository.getByIdLong(id);
-        if (optional != null) {
-            dtoList.add(toDTO(optional));
-            return dtoList.getFirst();
-        }
-        return null;
+    public StudentCourseMarkMapper findByIdLong(Integer id) {
+        return studentCourseMarkRepository.findViewById(id)
+                .orElse(null);
     }
 
     public boolean delete(Integer id) {
@@ -137,12 +161,24 @@ public class StudentCourseMarkService {
         return new PageImpl<StudentCourseMarkDTO>(dtoList, pageRequest, totalElement);
     }
 
+    public Page<StudentCourseMarkDTO> filter(SCMFilterDTO filterDTO, int page, int size) {
+        Page<StudentCourseMarkEntity> pageObj = scmRepository.filter(filterDTO, page, size);
+
+        List<StudentCourseMarkEntity> entityList = pageObj.getContent();
+        Long totalElement = pageObj.getTotalElements();
+
+        List<StudentCourseMarkDTO> dtoList = new LinkedList<>();
+        entityList.forEach(entity -> dtoList.add(toDTO(entity)));
+
+        return new PageImpl<StudentCourseMarkDTO>(dtoList, PageRequest.of(page, size), totalElement);
+    }
+
     public StudentCourseMarkDTO toDTO(StudentCourseMarkEntity entity) {
         StudentCourseMarkDTO dto = new StudentCourseMarkDTO();
         dto.setId(entity.getId());
         dto.setMark(entity.getMark());
-        dto.setCourseId(entity.getCourse());
-        dto.setStudentId(entity.getStudent());
+        dto.setCourseId(entity.getCourseId());
+        dto.setStudentId(entity.getStudentId());
         dto.setCreatedDate(entity.getCreatedDate());
         return dto;
     }

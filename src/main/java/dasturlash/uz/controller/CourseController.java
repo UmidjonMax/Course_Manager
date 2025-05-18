@@ -1,7 +1,9 @@
 package dasturlash.uz.controller;
 
 import dasturlash.uz.dto.CourseDTO;
+import dasturlash.uz.dto.CourseFilterDTO;
 import dasturlash.uz.dto.StudentDTO;
+import dasturlash.uz.dto.StudentFilterDTO;
 import dasturlash.uz.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -109,6 +111,14 @@ public class CourseController {
                                                         @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                        @RequestParam(value = "size", defaultValue = "10") Integer size) {
         return ResponseEntity.ok(courseService.paginationByPriceBetween(page-1, size, from, to));
+    }
+
+    @PostMapping("/filter")
+    public ResponseEntity<Page<CourseDTO>> filter(
+            @RequestBody CourseFilterDTO filterDTO,
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "3") Integer size) {
+        return ResponseEntity.ok(courseService.filter(filterDTO, page - 1, size));
     }
 }
 

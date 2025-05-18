@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -64,6 +65,6 @@ public class CourseCustomRepository {
         }
         Long totalCount = (Long) countQuery.getSingleResult();
 
-        return new PageImpl<>(entityList, null, totalCount);
+        return new PageImpl<>(entityList, PageRequest.of(page, size), totalCount);
     }
 }

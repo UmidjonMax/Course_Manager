@@ -2,6 +2,20 @@
 POST localhost:7075/student
 Content-Type: application/json
 
+### Create Mark
+POST localhost:7075/mark
+Content-Type: application/json
+
+{
+  "studentId": 12,
+  "courseId": 5,
+  "mark": 87
+}
+
+
+### Get Mark
+GET localhost:7075/mark/3
+
 ### Get By Name
 GET localhost:7075/student/by-name/
 
@@ -19,7 +33,15 @@ POST localhost:7075/student/filter
 Content-Type: application/json
 
 {
-  "id": 9
+  "level": 2
+}
+
+###filter Course
+POST localhost:7075/course/filter
+Content-Type: application/json
+
+{
+  "name": "Kotlin"
 }
 
 ### Create Course
