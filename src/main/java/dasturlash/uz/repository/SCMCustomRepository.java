@@ -28,7 +28,18 @@ public class SCMCustomRepository {
             conditionBuilder.append(" and id=:id ");
             params.put("id", filterDTO.getId());
         }
-
+        if (filterDTO.getStudentId() != null) {
+            conditionBuilder.append(" and studentId=:studentId ");
+            params.put("studentId", filterDTO.getStudentId());
+        }
+        if (filterDTO.getCourseId() != null) {
+            conditionBuilder.append(" and courseId=:courseId ");
+            params.put("courseId", filterDTO.getCourseId());
+        }
+        if (filterDTO.getMark() != null) {
+            conditionBuilder.append(" and mark >=:mark ");
+            params.put("mark", filterDTO.getMark());
+        }
         //..
         StringBuilder selectBuilder = new StringBuilder("From StudentCourseMarkEntity ");
         selectBuilder.append(conditionBuilder);

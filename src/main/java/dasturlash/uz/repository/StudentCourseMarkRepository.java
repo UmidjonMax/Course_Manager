@@ -23,10 +23,10 @@ public interface StudentCourseMarkRepository extends CrudRepository<StudentCours
                       @Param("studentId") Integer studentId, @Param("courseId") Integer courseId);
 
     @Query("""
-            select scm.id as id, 
-            scm.studentId as studentId, 
-            scm.courseId as courseId, 
-            scm.mark as mark, 
+            select scm.id as id,
+            scm.studentId as studentId,
+            scm.courseId as courseId,
+            scm.mark as mark,
             scm.createdDate as createdDate
             from StudentCourseMarkEntity scm where scm.id =:id""")
     public List<StudentCourseMarkMapper> getById(@Param("id") Integer id);
